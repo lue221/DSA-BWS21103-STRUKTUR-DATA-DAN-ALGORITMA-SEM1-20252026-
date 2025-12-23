@@ -1,4 +1,12 @@
-# main.py
+# TOP OF MAIN.PY
+
+# 1. Import Queue from queue.py
+from queue import ClinicQueue 
+
+# 2. Import LinkedList from the renamed file (linked_list.py)
+# You might need to open linked_list.py to check if the class is named 
+from linked_list import LinkedListrecords, Patient 
+
 import os
 from your_module_name import Patient, ClinicQueue, LinkedListrecords 
 # NOTE: Replace 'your_module_name' with the name of the file where your friends' code is saved!
