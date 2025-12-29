@@ -1,0 +1,151 @@
+class Patient:
+    def __init__(self, p_id, ic, name, age, gender, reason_of_visit):
+        self.p_id = p_id
+        self.name = name
+        self.ic = ic
+        self.age = age
+        self.gender = gender
+        self.reason_of_visit = reason_of_visit
+
+    def __str__(self):
+        return f"[ID: {self.p_id}] Name: {self.name} | IC: {self.ic}"
+
+class Node:
+    def __init__(self, patient):
+        self.patient = patient
+        self.next = None
+
+class ClinicQueue:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def enqueue(self, patient):
+        new_node = Node(patient)
+        if self.rear is None:
+            self.front = self.rear = new_node
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+        print(f"\n>> System: {patient.name} added to Queue.")
+
+    def dequeue(self):
+        if self.front is None: return None
+        temp = self.front
+        self.front = temp.next
+        if self.front is None: self.rear = None
+        return temp.patient
+
+    def display_queue(self):
+        print("\n=== CURRENT QUEUE (Waiting) ===")
+        if self.front is None:
+            print("(Queue is empty)")
+            return
+
+        current = self.front
+        pos = 1
+        while current:
+            p = current.patient
+            print(f"{pos}. {p}")
+            current = current.next
+            pos += 1
+        print("===============================")
+
+
+class LinkedListRecords:
+    def __init__(self):
+        self.head = None
+
+    def add_record(self, patient):
+        new_node = Node(patient)
+        if self.head is None:
+            self.head = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
+
+    def display_history(self): #Traversal
+        print("\n=== PATIENT HISTORY===")
+        if self.head is None:
+            print("(No records yet)")
+            return
+
+        current = self.head
+        while current:
+            print(f"{current.patient} -> ", end="")
+            current = current.next
+        print("None")
+        print("===============================================")
+
+    def search(self, query):
+        current = self.head
+        found = False
+        query = query.lower()
+
+        while current:
+            p = current.patient
+            if query in p.name.lower() or query in str(p.ic):
+                print(f"FOUND: {p}")
+                found = True
+            current = current.next
+
+        if not found:
+            print("   No matches found.")
+
+def main():
+    queue = ClinicQueue()
+    history = LinkedListRecords()
+
+    while True:
+        print("\n--- CLINIC CONSOLE SYSTEM ---")
+        print("1. Register New Patient")
+        print("2. Call Next Patient")
+        print("3. View Queue")
+        print("4. View History (Linked List)")
+        print("5. Search History")
+        print("6. Exit")
+
+        choice = input("Enter command: ")
+
+        if choice == '1':
+            print("\n[Registration]")
+            p_id = input("ID: ")
+            name = input("Name: ")
+            ic = input("IC: ")
+            age = input("Age: ")
+            gender = input("Gender: ")
+            rov = input("Reason: ")
+
+            p = Patient(p_id, ic, name, age, gender, rov)
+            queue.enqueue(p)
+
+        elif choice == '2':
+            patient = queue.dequeue()
+            if patient:
+                print(f"\n>> CALLING: {patient.name} (ID: {patient.p_id})")
+                print(">> Moving patient from Queue to History Records...")
+                history.add_record(patient)
+            else:
+                print("\n>> Error: Queue is empty.")
+
+        elif choice == '3':
+            queue.display_queue()
+
+        elif choice == '4':
+            history.display_history()
+
+        elif choice == '5':
+            q = input("\nEnter Name or IC to search: ")
+            history.search(q)
+
+        elif choice == '6':
+            print("Exiting system...")
+            break
+        else:
+            print("Invalid command.")
+
+
+if __name__ == "__main__":
+    main() 
