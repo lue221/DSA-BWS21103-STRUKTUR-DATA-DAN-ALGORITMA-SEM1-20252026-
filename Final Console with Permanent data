@@ -36,10 +36,12 @@ class ClinicQueue:
         print(f"\n {patient.name} added to Queue.")
 
     def dequeue(self):
-        if self.front is None: return None
+        if self.front is None: 
+            return None
         temp = self.front
         self.front = temp.next
-        if self.front is None: self.rear = None
+        if self.front is None: 
+            self.rear = None
         return temp.patient
 
     def display_queue(self):
