@@ -138,7 +138,7 @@ class LinkedListRecords:
             return
         if self.head.next is None:
             self.head=None
-            self.save_file()
+            self.save_records()
             return
 
         secondLast= self.head
